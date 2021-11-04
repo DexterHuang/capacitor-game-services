@@ -62,6 +62,7 @@ public class GameServices extends Plugin {
                     JSObject responseData = new JSObject();
                     responseData.put("player_name", playerClientTask.getResult().getDisplayName());
                     responseData.put("player_id", playerClientTask.getResult().getPlayerId());
+                    responseData.put("id_token", signInAccount.getIdToken());
                     response.put("response", responseData);
                     savedCall.resolve(response);
                 });
@@ -281,6 +282,7 @@ public class GameServices extends Plugin {
                     JSObject responseData = new JSObject();
                     responseData.put("player_name", playerClientTask.getResult().getDisplayName());
                     responseData.put("player_id", playerClientTask.getResult().getPlayerId());
+                    responseData.put("id_token", signedInAccount.getIdToken());
                     response.put("response", responseData);
                     savedCall.resolve(response);
                 });
