@@ -55,7 +55,7 @@ public class GameServices extends Plugin {
         // Log.d(TAG, "GameService: CLIENT ID: " + clientId);
         GoogleSignInOptions.Builder builder = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN);
         if(clientId != null){
-            builder.requestServerAuthCode(clientId);
+            builder.requestIdToken(clientId);
         }
         mGoogleSignInOptions = builder.build();
 
@@ -79,7 +79,7 @@ public class GameServices extends Plugin {
                     JSObject responseData = new JSObject();
                     responseData.put("player_name", playerClientTask.getResult().getDisplayName());
                     responseData.put("player_id", playerClientTask.getResult().getPlayerId());
-                    responseData.put("auth_code", signInAccount.getServerAuthCode());
+                    responseData.put("id_token", signInAccount.getIdToken());
                     response.put("response", responseData);
                     savedCall.resolve(response);
                 });
@@ -299,7 +299,7 @@ public class GameServices extends Plugin {
                     JSObject responseData = new JSObject();
                     responseData.put("player_name", playerClientTask.getResult().getDisplayName());
                     responseData.put("player_id", playerClientTask.getResult().getPlayerId());
-                    responseData.put("auth_code", signedInAccount.getServerAuthCode() + "");
+                    responseData.put("id_token", signedInAccount.getIdToken() + "");
 
                     response.put("response", responseData);
                     savedCall.resolve(response);
