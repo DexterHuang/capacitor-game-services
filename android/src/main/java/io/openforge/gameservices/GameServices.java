@@ -1,6 +1,10 @@
 package io.openforge.gameservices;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.util.Log;
 import android.webkit.WebView;
 
@@ -37,11 +41,24 @@ public class GameServices extends Plugin {
     public void load() {
         super.load();
         Log.d(TAG, "lifecycle load called");
+        Context context = getContext();
+        ApplicationInfo app = null;
+        String clientId = null;
+        try {
+            app = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        Bundle bundle = app.metaData;
+        clientId = bundle.getString("google_play_service_client_id");
 
-        mGoogleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
-                // .requestEmail()
-                // .requestProfile()
-                .build();
+        // Log.d(TAG, "GameService: CLIENT ID: " + clientId);
+        GoogleSignInOptions.Builder builder = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN);
+        if(clientId != null){
+            builder.requestServerAuthCode(clientId);
+        }
+        mGoogleSignInOptions = builder.build();
+
     }
 
     @Override
@@ -62,7 +79,7 @@ public class GameServices extends Plugin {
                     JSObject responseData = new JSObject();
                     responseData.put("player_name", playerClientTask.getResult().getDisplayName());
                     responseData.put("player_id", playerClientTask.getResult().getPlayerId());
-                    responseData.put("id_token", signInAccount.getIdToken());
+                    responseData.put("auth_code", signInAccount.getServerAuthCode());
                     response.put("response", responseData);
                     savedCall.resolve(response);
                 });
@@ -282,7 +299,8 @@ public class GameServices extends Plugin {
                     JSObject responseData = new JSObject();
                     responseData.put("player_name", playerClientTask.getResult().getDisplayName());
                     responseData.put("player_id", playerClientTask.getResult().getPlayerId());
-                    responseData.put("id_token", signedInAccount.getIdToken());
+                    responseData.put("auth_code", signedInAccount.getServerAuthCode() + "");
+
                     response.put("response", responseData);
                     savedCall.resolve(response);
                 });
