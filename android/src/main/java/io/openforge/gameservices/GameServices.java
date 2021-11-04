@@ -39,8 +39,8 @@ public class GameServices extends Plugin {
         Log.d(TAG, "lifecycle load called");
 
         mGoogleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
-                .requestEmail()
-                .requestProfile()
+                // .requestEmail()
+                // .requestProfile()
                 .build();
     }
 
