@@ -10,7 +10,7 @@ export interface GameServicesPlugin {
       player_name: any,
       player_id: any,
       error?: any,
-      id_token: string
+      auth_code: string
     }
   }>;
   signOut(): Promise<any>;
